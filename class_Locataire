@@ -1,0 +1,22 @@
+<?php
+// Classe Locataire héritant de Personne
+class Locataire extends Personne {
+    private $coordonneesBancaires;
+    private $idApparts;
+
+    public function __construct($id, $nom, $prenom, $mail, $telephone, $role, $coordonneesBancaires, $idApparts) {
+        parent::__construct($id, $nom, $prenom, $mail, $telephone, $role);
+        $this->coordonneesBancaires = $coordonneesBancaires;
+        $this->idApparts = $idApparts;
+    }
+
+    // Getters spécifiques à Locataire
+    public function getCoordonneesBancaires() {
+        return $this->coordonneesBancaires;
+    }
+
+    public function getIdApparts() {
+        return $this->idApparts;
+    }
+}
+?>

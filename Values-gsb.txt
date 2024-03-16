@@ -1,0 +1,82 @@
+CREATE TABLE personne (
+   id_personne INT,
+   nom VARCHAR(50),
+   prenom VARCHAR(50),
+   adresse VARCHAR(50),
+   mail VARCHAR(50),
+   telephone VARCHAR(50),
+   PRIMARY KEY(id_personne)
+);
+
+CREATE TABLE coordonnees_bancaires (
+   id_coord INT,
+   iban VARCHAR(50),
+   code_banque VARCHAR(50),
+   PRIMARY KEY(id_coord)
+);
+
+CREATE TABLE proprietaire (
+   id INT,
+   code_proprio INT,
+   cotisation INT,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id) REFERENCES personne(id_personne)
+);
+
+CREATE TABLE apparts (
+   id_apparts INT AUTO_INCREMENT,
+   rue INT,
+   adresse VARCHAR(50),
+   cp INT,
+   type_appart VARCHAR(30),
+   etage INT,
+   num_bat INT,
+   num_appart INT,
+   loyer DECIMAL(15,2),
+   id_proprio INT NOT NULL,
+   PRIMARY KEY(id_apparts),
+   FOREIGN KEY(id_proprio) REFERENCES proprietaire(id)
+);
+
+CREATE TABLE Locataire (
+   id INT,
+   id_coord INT NOT NULL,
+   id_apparts INT NOT NULL,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id) REFERENCES personne(id_personne),
+   FOREIGN KEY(id_coord) REFERENCES coordonnees_bancaires(id_coord),
+   FOREIGN KEY(id_apparts) REFERENCES apparts(id_apparts)
+);
+
+CREATE TABLE contrat_location (
+   id_contrat INT,
+   date_debut DATE,
+   montant_loyer INT,
+   date_fin DATE,
+   id_apparts INT NOT NULL,
+   PRIMARY KEY(id_contrat),
+   FOREIGN KEY(id_apparts) REFERENCES apparts(id_apparts)
+);
+
+CREATE TABLE visiteur (
+   id INT,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id) REFERENCES personne(id_personne)
+);
+
+CREATE TABLE visiter (
+   id_apparts INT,
+   id INT,
+   date_visite VARCHAR(50),
+   PRIMARY KEY(id_apparts, id),
+   FOREIGN KEY(id_apparts) REFERENCES apparts(id_apparts),
+   FOREIGN KEY(id) REFERENCES visiteur(id)
+);
+
+CREATE TABLE lier (
+   id_contrat INT,
+   id_coord INT,
+   PRIMARY KEY(id_contrat, id_coord),
+   FOREIGN KEY(id_contrat) REFERENCES contrat_location(id_contrat),
+   FOREIGN KEY(id_coord) REFERENCES coordonnees_bancaires(id_coord)
+);

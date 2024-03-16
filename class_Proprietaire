@@ -1,0 +1,23 @@
+<?php
+// Classe Proprietaire héritant de Personne
+class Proprietaire extends Personne {
+    private $codeProprio;
+    private $cotisation;
+
+    public function __construct($id, $nom, $prenom, $mail, $telephone, $role, $codeProprio, $cotisation) {
+        parent::__construct($id, $nom, $prenom, $mail, $telephone, $role);
+        $this->codeProprio = $codeProprio;
+        $this->cotisation = $cotisation;
+    }
+
+    // Getters spécifiques à Proprietaire
+    public function getCodeProprio() {
+        return $this->codeProprio;
+    }
+
+    public function getCotisation() {
+        return $this->cotisation;
+    }
+}
+
+?>
