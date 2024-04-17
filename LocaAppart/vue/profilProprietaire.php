@@ -1,4 +1,7 @@
 <?php
+
+include_once "../modele/connexionPDO.php";
+
 session_start();
 
 // Vérifier si l'utilisateur est connecté en tant que propriétaire

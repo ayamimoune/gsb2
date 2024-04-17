@@ -31,7 +31,7 @@ $appartements = $appartementBD->getAppartByIdProprio($id_proprietaire);
         <h2>Tableau de Bord Propriétaire</h2>
         <div class="profile">
             <a href="./ajouterAppartement.php">Ajouter un Appartement</a>
-            <a href="./gererdemende.php">Gérer les demandes</a>
+            <a href="./gererDemande.php">Gérer les demandes</a>
             <a href="profilProprietaire.php">Mon Profil</a>
         </div>
     </div>

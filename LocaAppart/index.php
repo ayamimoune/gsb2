@@ -32,7 +32,7 @@ $appartements = $appartementDB->getApparts();
                     <h2><?= htmlspecialchars($appartement->getAdresse()); ?></h2>
                     <p>Type: <?= htmlspecialchars($appartement->getTypeAppart()); ?></p>
                     <p>Loyer: <?= htmlspecialchars($appartement->getLoyer()); ?>€/mois</p>
-                    <a href="demande.php?appartement_id=<?= $appartement->getIDAppart(); ?>">Faire une demande</a>
+                    <a href="./vue/connexion.php">Faire une demande</a>
                 </div>
             <?php endforeach; ?>
         <?php else: ?>

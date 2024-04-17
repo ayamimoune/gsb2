@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="../connexion.css">
     <title>Connexion</title>
 </head>
+<div class="header">
+        <a href="../index.php">Retour</a>
+    </div>
 <body>
     <h2>Connexion</h2>
     <form action="../controleur/connexion.php" method="post">

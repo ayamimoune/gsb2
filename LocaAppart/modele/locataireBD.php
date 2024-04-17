@@ -14,115 +14,79 @@ class locataireBD
 
     public function addLocataire($locataire)
     {
-        $mdp = $locataire->getMDPLoc();
+        $mdp = $locataire->getMdpLocataire(); // Utilisation de getMdpLocataire pour récupérer le mot de passe
         $mdpHash = password_hash($mdp, PASSWORD_BCRYPT);
 
         try {
-            $req = $this->conn->prepare("INSERT INTO locataires (id_locataire, nomLoc, prenomLoc, mailLoc, mdpLoc, dateNaiss, telLoc) values (:id_locataire, :nomLoc, :prenomLoc, :mailLoc, :mdpLoc, :dateNaiss, :telLoc)");
-            $req->bindValue(':id_locataire', $locataire->getIdLoc());
-            $req->bindValue(':nomLoc', $locataire->getNomLoc());
-            $req->bindValue(':prenomLoc', $locataire->getPrenomLoc());
-            $req->bindValue(':mailLoc', $locataire->getMailLoc());
-            $req->bindValue(':mdpLoc', $mdpHash);
-            $req->bindValue(':dateNaiss', $locataire->getAdresse());
-            $req->bindValue(':telLoc', $locataire->getTelLoc());
+            $req = $this->conn->prepare("INSERT INTO locataire (nomLocataire, prenomLocataire, mailLocataire, telephoneLocataire, loginLocataire, mdpLocataire) VALUES (:nomLocataire, :prenomLocataire, :mailLocataire, :telephoneLocataire, :loginLocataire, :mdpLocataire)");
+            $req->bindValue(':nomLocataire', $locataire->getNomLocataire());
+            $req->bindValue(':prenomLocataire', $locataire->getPrenomLocataire());
+            $req->bindValue(':mailLocataire', $locataire->getMailLocataire());
+            $req->bindValue(':telephoneLocataire', $locataire->getTelephoneLocataire());
+            $req->bindValue(':loginLocataire', $locataire->getLoginLocataire());
+            $req->bindValue(':mdpLocataire', $mdpHash);
             $req->execute();
 
             // Récupérer l'ID de la personne ajoutée
             $lastInsertedID = $this->conn->lastInsertId();
         
-            // Retourner l'objet personne avec l'ID attribué
-            return $this->getLocataireByID($lastInsertedID);
+            // Retourner l'objet locataire avec l'ID attribué
+            return $this->getLocataireById($lastInsertedID);
 
-            } catch (PDOException $e) {
-                print "Erreur !: " . $e->getMessage();
-                die();
-            }
+        } catch (PDOException $e) {
+            print "Erreur !: " . $e->getMessage();
+            die();
+        }
     }
 
-    public function getLocataires()
-{
-    try {
-        $req = $this->conn->prepare("SELECT * from locataires");
-        $req->execute();
-        $resultat = $req->fetchAll(PDO::FETCH_ASSOC);
+    public function getlocataire()
+    {
+        try {
+            $req = $this->conn->prepare("SELECT * FROM locataire");
+            $req->execute();
+            $resultat = $req->fetchAll(PDO::FETCH_ASSOC);
 
-        if ($resultat) {
-            foreach ($resultat as $ligne ) {
+            $locataires = [];
+            foreach ($resultat as $ligne) {
                 $locataire = new locataire(
                     $ligne["id_locataire"],
                     $ligne["nomLoc"],
                     $ligne["prenomLoc"],
                     $ligne["mailLoc"],
-                    $ligne["mdpLoc"],
-                    $ligne["dateNaiss"],
-                    $ligne["telLoc"]
+                    $ligne["telephoneLoc"],
+                    $ligne["loginLoc"],
+                    $ligne["mdpLoc"]
                 );
                 $locataires[] = $locataire;
             }
-            return $locataire;
-        }
-        else{
-            return null;
-        }
+            return $locataires;
 
-    } catch (PDOException $e) {
-        print "Erreur !: " . $e->getMessage();
-        die();
+        } catch (PDOException $e) {
+            print "Erreur !: " . $e->getMessage();
+            die();
+        }
     }
-}
 
-public function getLocataireById($id_locataire)
-{
-    try{
-        $req = $this->conn->prepare("SELECT * FROM locataires WHERE id_locataire=:id_locataire");
-        $req->bindValue(":id_locataire", $id_locataire);
-
-        $req->execute();
-
-        $resultat=$req->fetch(PDO::FETCH_ASSOC);
-        if($resultat){
-            $locataire = new locataire(
-                $resultat["id_locataire"],
-                $resultat["nomLoc"],
-                $resultat["prenomLoc"],
-                $resultat["mailLoc"],
-                $resultat["mdpLoc"],
-                $resultat["dateNaiss"],
-                $resultat["telLoc"]
-            );
-            return $locataire;
-        }
-        else{
-            return null;
-        }
-
-    } catch(PDOException $e){
-        print "Erreur !: ". $e->getMessage();
-        die();
-    }
-}
-
-public function getLocataireByLogon($mailLoc)
+    public function getLocataireById($id_locataire)
     {
         try {
-            $req = $this->conn->prepare("SELECT * from proprietaires where mailLoc=:mailLoc");
-            $req->bindValue(':mailLoc', $mailLoc);
+            $req = $this->conn->prepare("SELECT * FROM locataire WHERE id_locataire=:id_locataire");
+            $req->bindValue(":id_locataire", $id_locataire);
             $req->execute();
-            $resultat = $req->fetch(PDO::FETCH_ASSOC);
 
-            if($resultat){
-                return new locataire(
+            $resultat = $req->fetch(PDO::FETCH_ASSOC);
+            if ($resultat) {
+                $locataire = new locataire(
                     $resultat["id_locataire"],
-                    $resultat["nomLoc"],
-                    $resultat["prenomLoc"],
-                    $resultat["mailLoc"],
-                    $resultat["mdpLoc"],
-                    $resultat["dateNaiss"],
-                    $resultat["telLoc"]
+                    $resultat["nomLocataire"],
+                    $resultat["prenomLocataire"],
+                    $resultat["mailLocataire"],
+                    $resultat["telephoneLocataire"],
+                    $resultat["loginLocataire"],
+                    $resultat["mdpLocataire"]
                 );
-            }
-            else{
+                return $locataire;
+            } else {
                 return null;
             }
 
@@ -132,5 +96,33 @@ public function getLocataireByLogon($mailLoc)
         }
     }
 
+    public function getLocataireByLogin($loginLocataire)
+    {
+        try {
+            $req = $this->conn->prepare("SELECT * FROM locataire WHERE loginLocataire=:loginLocataire");
+            $req->bindValue(':loginLocataire', $loginLocataire);
+            $req->execute();
+            $resultat = $req->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultat) {
+                $locataire = new locataire(
+                    $resultat["id_locataire"],
+                    $resultat["nomLocataire"],
+                    $resultat["prenomLocataire"],
+                    $resultat["mailLocataire"],
+                    $resultat["telephoneLocataire"],
+                    $resultat["loginLocataire"],
+                    $resultat["mdpLocataire"]
+                );
+                return $locataire;
+            } else {
+                return null;
+            }
+
+        } catch (PDOException $e) {
+            print "Erreur !: " . $e->getMessage();
+            die();
+        }
+    }
 }
 ?>

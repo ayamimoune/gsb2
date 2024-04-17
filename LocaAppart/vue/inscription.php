@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Inscription</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../inscription.css">
 </head>
 <body>
     <header>
@@ -26,7 +26,10 @@
             <label for="email">Email :</label>
             <input type="email" id="email" name="email" required><br><br>
 
-            <label for="login">Email :</label>
+            <label for="telephone">Téléphone :</label>
+            <input type="telephone" id="telephone" name="telephone" required><br><br>
+
+            <label for="login">Login :</label>
             <input type="login" id="login" name="login" required><br><br>
 
             <label for="password">Mot de passe :</label>

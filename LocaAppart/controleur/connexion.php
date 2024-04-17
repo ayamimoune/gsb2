@@ -2,6 +2,9 @@
 // Inclure les classes nécessaires avec les bons chemins
 include_once "../modele/proprietaireBD.php";
 include_once "../modele/locataireBD.php";
+include_once "../modele/connexionPDO.php";
+include_once "../modele/proprietaire.php";
+include_once "../modele/locataire.php";
 
 // Vérifier si le formulaire de connexion a été soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["username"]) && isset($_POST["password"])) {
@@ -25,8 +28,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["username"]) && isset($
     // Vérifier l'utilisateur trouvé (propriétaire ou locataire)
     if ($proprietaire || $locataire) {
         // Vérifier le mot de passe hashé
-        $utilisateur = $proprietaire ? $proprietaire : $locataire;
-        if (password_verify($mdp, $utilisateur->getMdpProprio() ?? $utilisateur->getMDPLoc())) {
+        if ($proprietaire) {
+            $utilisateur = $proprietaire;
+            $mdpUtilisateur = $utilisateur->getMdpProprio(); // Utiliser getMdpProprio pour obtenir le mot de passe du propriétaire
+        } else {
+            $utilisateur = $locataire;
+            $mdpUtilisateur = $utilisateur->getMdpLocataire(); // Utiliser getMdpLocataire pour obtenir le mot de passe du locataire
+        }
+
+        if (password_verify($mdp, $mdpUtilisateur)) {
             // Authentification réussie
             session_start();
             if ($proprietaire) {
@@ -36,21 +46,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["username"]) && isset($
                 header("Location: ../vue/tableau_de_bord_proprietaire.php");
                 exit();
             } else {
-                $_SESSION["id_locataire"] = $locataire->getIdLoc();
-                $_SESSION["nomLoc"] = $locataire->getNomLoc();
+                $_SESSION["id_locataire"] = $locataire->getIdLocataire();
+                $_SESSION["nomLocataire"] = $locataire->getNomLocataire();
                 // Rediriger le locataire vers le tableau de bord locataire
-                header("Location: tableau_de_bord_locataire.php");
+                header("Location: ../vue/tableau_de_bord_locataire.php");
                 exit();
             }
         } else {
             // Mot de passe incorrect
             $error = "Mot de passe incorrect.";
-            include "connexion.php";
+            include "../vue/connexion.php";
         }
     } else {
         // Identifiant incorrect
         $error = "Identifiant incorrect.";
-        include "connexion.php";
+        include "../vue/connexion.php";
     }
 } else {
     // Afficher le formulaire de connexion par défaut

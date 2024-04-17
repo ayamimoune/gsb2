@@ -9,21 +9,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nom = $_POST["nom"];
     $prenom = $_POST["prenom"];
     $email = $_POST["email"];
+    $telephone = $_POST["telephone"];
     $login = $_POST["login"];
     $password = $_POST["password"];
     $role = $_POST["role"]; // Récupérer le rôle choisi
 
     // Valider et insérer les données dans la base de données
-    if (!empty($nom) && !empty($prenom) && filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($login) && !empty($password) && !empty($role)) {
+    if (!empty($nom) && !empty($prenom) && filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($telephone) && !empty($login) && !empty($password) && !empty($role)) {
         // Créer une instance appropriée en fonction du rôle choisi
         if ($role === "proprietaire") {
             $proprietaireBD = new ProprietaireBD();
-            // Insérer dans la table des propriétaires
-            // Exemple : $proprietaireBD->registerProprietaire($nom, $prenom, $email, $login, $password);
+            $proprietaire = new proprietaire(null, $nom, $prenom, $email, $telephone, $login, $password);
+            $proprietaireBD->addProprio($proprietaire);
         } elseif ($role === "locataire") {
             $locataireBD = new LocataireBD();
-            // Insérer dans la table des locataires
-            // Exemple : $locataireBD->registerLocataire($nom, $prenom, $email, $login, $password);
+            $locataire = new locataire(null, $nom, $prenom, $email, $telephone, $login, $password, null, null);
+            $locataireBD->addLocataire($locataire);
         }
         
         // Rediriger l'utilisateur vers une page de connexion
@@ -36,7 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         include "../vue/inscription.php";
     }
 } else {
-    // Afficher le formulaire d'inscription par défaut
-    include "../vue/inscription.php";
+    // Rediriger vers la page d'inscription si le formulaire n'a pas été soumis directement
+    header("Location: ../vue/inscription.php");
+    exit();
 }
 ?>
