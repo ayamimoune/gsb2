@@ -1,66 +1,84 @@
+/* Reset des marges et des paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Style général du corps et de la police */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
+    color: #333;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
 
-form {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* Conteneur du formulaire */
+.container {
     width: 300px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Titre du formulaire */
 h2 {
     text-align: center;
-    color: #333333;
+    margin-bottom: 20px;
 }
 
+/* Champ de formulaire */
 label {
     display: block;
     margin-bottom: 8px;
-    font-weight: bold;
-    color: #666666;
 }
 
 input[type="text"],
 input[type="password"] {
     width: 100%;
     padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #cccccc;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box;
 }
 
+/* Bouton de soumission */
 button {
-    background-color: #4caf50;
-    color: #ffffff;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
     border: none;
-    padding: 12px 20px;
     border-radius: 4px;
     cursor: pointer;
-    width: 100%;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0056b3;
 }
 
-a {
-    text-decoration: none;
-    color: #007bff;
+/* Liens supplémentaires */
+.additional-links {
     margin-top: 10px;
-    display: block;
     text-align: center;
 }
 
-a:hover {
+.additional-links a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.additional-links a:hover {
     text-decoration: underline;
+}
+
+/* Message d'erreur */
+.error-message {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
 }
